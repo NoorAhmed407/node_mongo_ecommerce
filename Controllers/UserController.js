@@ -14,7 +14,7 @@ router.post('/',async (req,res)=>{
             name: 'Muneer',
             email: "muneerahmed@gmail.com",
             password: "12345678",
-            // gender: "Male",
+            gender: "Male",
         };
         let newUser = await User.create(user);
         return res.status(200).json({data: newUser, success: true, message: "User Created Successfully!"});
