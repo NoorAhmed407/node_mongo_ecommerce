@@ -4,5 +4,5 @@ module.exports ={
         useNewUrlParser: true, 
         useUnifiedTopology: true,
     },
-    PORT: 4000
+    saltKey: "ecomm_myjwtSecret",
 }
