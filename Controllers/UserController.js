@@ -3,7 +3,7 @@ const router = express.Router();
 const {saltKey} = require('../Helper/dbConfig');
 const bcrypt = require('bcryptjs');
 const jwt= require('jsonwebtoken');
-const User = require('./../Models/User');
+const User = require('../Models/Users');
 const authMiddleware = require('./../Middlewares/Authorization');
 
 
