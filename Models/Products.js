@@ -7,6 +7,10 @@ const productSchema = new mongoose.Schema({
         required: true,
     },
     description: String,
+    price: {
+        type: Number,
+        required: true
+    },
     categoryId: {
         type: mongoose.Types.ObjectId, 
     },
@@ -17,4 +21,6 @@ const productSchema = new mongoose.Schema({
 });
 
 productSchema.set('timestamps', true);
-const Product = mongoose.model('Products', productSchema)
+const Product = mongoose.model('Products', productSchema);
+
+module.exports = Product;

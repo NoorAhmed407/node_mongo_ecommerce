@@ -22,6 +22,9 @@ mongoose.connect(
 
 //Initialize Routes.
 app.use("/api/auth", require("./Controllers/UserController"));
+app.use("/api", require("./Controllers/OrderController"));
+app.use("/api", require("./Controllers/ProductController"));
+app.use("/api", require("./Controllers/CategoryController"));
 
 //error handling middleware
 app.use((err, req, res, next) => {
