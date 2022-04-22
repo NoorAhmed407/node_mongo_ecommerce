@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const orderDetailSchema = new mongoose.Schema({
     productId: mongoose.Types.ObjectId,
-    quntity: Number,
+    quantity: Number,
 })
 
 const orderSchema = new mongoose.Schema({
