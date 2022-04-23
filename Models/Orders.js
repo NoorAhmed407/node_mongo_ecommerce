@@ -2,13 +2,13 @@ const mongoose = require('mongoose');
 
 
 const orderDetailSchema = new mongoose.Schema({
-    productId: mongoose.Types.ObjectId,
+    productId: mongoose.Schema.Types.ObjectId,
     quantity: Number,
 })
 
 const orderSchema = new mongoose.Schema({
     orderedBy: {
-        type: mongoose.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
         required: true,
     },
 

@@ -34,6 +34,33 @@ const storage = multer.diskStorage({
 
 
 router.post('/product/create', [authMiddleware, upload.array('images', 3)], createProduct);
+router.get('/products', authMiddleware, getProducts);
+router.get('/product', authMiddleware, getSingleProduct);
+
+
+async function getSingleProduct(req,res){
+  const {id} = req.query;
+  try{
+    const product = await Product.findById(id).select('-createdAt -updatedAt -__v').populate({path: 'categoryId', select: ['name']});
+    return res.status(200).json({success: true, message: "Product Fetched Successfully", data: product});
+  }
+  catch(e){
+    return res.status(500).json({success: false, message: e?.message});
+
+  }
+}
+
+async function getProducts(req,res){
+  const query = req.query;
+  try{
+    const products = await Product.find({...query}).select('-createdAt -updatedAt -__v').populate({path: 'categoryId', select: ['name'] });
+    return res.status(200).json({success: true, message: "Product Fetched Successfully", data: products});
+  }
+  catch(e){
+    return res.status(500).json({success: false, message: e?.message});
+
+  }
+}
 
 
 async function createProduct(req, res){
