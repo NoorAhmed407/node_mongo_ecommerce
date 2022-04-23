@@ -36,6 +36,22 @@ const storage = multer.diskStorage({
 router.post('/product/create', [authMiddleware, upload.array('images', 3)], createProduct);
 router.get('/products', authMiddleware, getProducts);
 router.get('/product', authMiddleware, getSingleProduct);
+router.post('/product/delete', authMiddleware, deleteProduct);
+
+
+
+async function deleteProduct(req,res){
+  const {productId} = req.body;
+  // res.send(productId);
+  try{
+    let product = await Product.findByIdAndDelete(productId);
+    return res.status(200).json({success: true, message: "Product Deleted Successfully", data: product});
+  }
+  catch(e){
+    return res.status(500).json({success: false, message: e?.message});
+  }
+
+}
 
 
 async function getSingleProduct(req,res){
