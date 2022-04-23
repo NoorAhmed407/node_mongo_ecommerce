@@ -42,7 +42,6 @@ router.post('/product/delete', authMiddleware, deleteProduct);
 
 async function deleteProduct(req,res){
   const {productId} = req.body;
-  // res.send(productId);
   try{
     let product = await Product.findByIdAndDelete(productId);
     return res.status(200).json({success: true, message: "Product Deleted Successfully", data: product});
