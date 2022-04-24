@@ -60,7 +60,7 @@ async function updateProduct(req,res){
 
 async function deleteProduct(req,res){
   if(req.user.role !== 1){
-    return res.status(401).json({success: false, message: "You have no rights to add product"});
+    return res.status(401).json({success: false, message: "You have no rights to delete product"});
   }
   const {productId} = req.body;
   try{
