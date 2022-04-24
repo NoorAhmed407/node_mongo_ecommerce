@@ -3,6 +3,7 @@ const authMiddleware = require('../Middlewares/Authorization');
 const router = express.Router();
 const multer = require('multer');
 const Product = require('./../Models/Products');
+const Categories = require('./../Models/Categories');
 
 
 const storage = multer.diskStorage({
@@ -37,10 +38,30 @@ router.post('/product/create', [authMiddleware, upload.array('images', 3)], crea
 router.get('/products', authMiddleware, getProducts);
 router.get('/product', authMiddleware, getSingleProduct);
 router.post('/product/delete', authMiddleware, deleteProduct);
+router.post('/product/update', [authMiddleware, upload.array('images', 3)], updateProduct);
 
 
+
+async function updateProduct(req,res){
+  if(req.user.role !== 1){
+    return res.status(401).json({success: false, message: "You have no rights to add product"});
+  }
+  const {productId} = req.query;
+   req.body.images = req.files.map(val=>val.path);
+
+  try{
+    let product = await Product.updateOne({_id: productId }, { $set:{...req.body}});
+    return res.status(200).json({success: true, message: "Product Updated Successfully", data: product});
+  }
+  catch(e){
+    return res.status(500).json({success: false, message: e?.message});
+  }
+}
 
 async function deleteProduct(req,res){
+  if(req.user.role !== 1){
+    return res.status(401).json({success: false, message: "You have no rights to add product"});
+  }
   const {productId} = req.body;
   try{
     let product = await Product.findByIdAndDelete(productId);
@@ -67,6 +88,7 @@ async function getSingleProduct(req,res){
 
 async function getProducts(req,res){
   const query = req.query;
+ 
   try{
     const products = await Product.find({...query}).select('-createdAt -updatedAt -__v').populate({path: 'categoryId', select: ['name'] });
     return res.status(200).json({success: true, message: "Product Fetched Successfully", data: products});
@@ -79,10 +101,18 @@ async function getProducts(req,res){
 
 
 async function createProduct(req, res){
-   const {name,description,categoryId, price} = req.body;
-   const images = req.files.map(val=>val.path);
+
+  if(req.user.role !== 1){
+    return res.status(401).json({success: false, message: "You have no rights to add product"});
+  } 
+  const {name,description,categoryId, price} = req.body;
+  const images = req.files.map(val=>val.path);
+
    try{
-    let product = await Product.create({name, description, categoryId, price, images });
+     let category = await Categories.findById(categoryId);
+     let product = await Product.create({name, description, categoryId, price, images });
+     category.products.push(product._id);
+     await category.save();
     return res.status(200).json({success: true, message: "Product Created Successfully", data: product});
 }
 catch(e){
